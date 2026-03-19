@@ -1,0 +1,35 @@
+import random
+#  DEFINIÇÃO
+# LISTAR 20 CARACTERISTICAS DE POSTS VIRAIS
+
+NOMES_CARACTERISTICAS = [
+    "QUALIDADE 4K",
+    "VIDEO CURTO",
+    "LEGENDA CURTA",
+    "USO DE HASHTAG TREND",
+    "AUDIO VIRAL",
+    "CORES VIBRANTES",
+    "PRESENÇA DE ROSTO HUMANO",
+    "CTA (CALL TO ACTION)",
+    "LEGENDA EMBUTIDA",
+    "POSTADO EM HORÁRIO DE PICO",
+    "COLLAB COM OUTRO PULICO",
+    "RESPONDE AOS COMENTÁRIOS",
+    "USO DE ENQUETE",
+    "THUMB ATRAENTE",
+    "TEMA QUE DESPERTA CURIOSIDADE",
+    "TUTORIAL/EDUCATIVO",
+    "CENÁRIO ESTÉTICO",
+    "CORTE RÁPIDO EDIÇÃO",
+    "TRILHA SONORA SINCRONIZADA"
+    ]
+
+# ALVOR_VIRAL = [1] * len(NOMES_CARACTERISTICAS)
+ALVOR_VIRAL = [1] * 20
+print(ALVOR_VIRAL)
+
+def criar_post_aleatorio():
+    return [random.randint(0, 1) for _ in range(20)] 
+
+psot_teste = criar_post_aleatorio()
+print(f"Post teste: {psot_teste}")
