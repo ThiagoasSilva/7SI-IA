@@ -19,7 +19,7 @@ SATURACAO = {
 ORCAMENTO = 10_000
 TAMANHO_POPULACAO = 20
 MAX_GERACOES = 100
-TAXA_MUTACAO = 0.2
+TAXA_MUTACAO = 0.1
 
 def criar_estrategia_aleatoria():
     pesos = [random.randint(1, 10) for _ in range(4)]
@@ -112,8 +112,14 @@ for i, canal in enumerate(canais):
     retorno = investimento * roas_efetivo
     print(f"{canal:<10} {melhor[i]:>4}% - R${investimento:<6,.2f} investidos"
           f"(ROAS efetivo: {roas_efetivo:.2f}x) - R${retorno:<7,.0f}")
-    print(f"="*40)
-    print(f"('TOTAL':<10) {'100':<4}% - R${ORCAMENTO:<6,} investidos"
-          f"                    - R4{calcular_retorno(melhor):7,.0f}")
-    print(f"\nROAS médio final: {}")
+print(f"="*40)
+
+print(f"('TOTAL':<10) {'100':<4}% - R${ORCAMENTO:<6,} investidos"
+        f"                    - R4{calcular_retorno(melhor):7,.0f}")
+
+# print(f"\nROAS médio final: {melhor / ORCAMENTO:,.2f}")
+
+print(f"\n(Compare com tudo no Google: "
+        f"R${calcular_retorno([100, 0, 0, 0]):,.0f} | "
+        f"Divisão igual: R${calcular_retorno([25, 25, 25, 25]):,.0f}")
     
