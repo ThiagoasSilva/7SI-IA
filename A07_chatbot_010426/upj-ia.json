@@ -1,0 +1,332 @@
+{
+  "name": "upj-ia",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -112,
+        32
+      ],
+      "id": "e35d06ff-751a-4961-b42a-f5b08a5ef092",
+      "name": "Telegram Trigger",
+      "webhookId": "11fdba40-9bad-401a-9cbb-cd7ecda5e21e",
+      "credentials": {
+        "telegramApi": {
+          "id": "9XPgChFNl08L6Ne8",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "24d490fe-3594-4cd8-be61-877ab982765c",
+              "name": "resposta",
+              "value": "=Recebi a mensagem:  {{ $json.message.text }}",
+              "type": "string"
+            },
+            {
+              "id": "b5c93352-f97a-452b-942a-74c65c4b4b73",
+              "name": "Remetente",
+              "value": "={{ $json.message.chat.id }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        112,
+        32
+      ],
+      "id": "da80fc17-e0f4-4e81-8c46-43064c7867d4",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Edit Fields').first().json.Remetente }}",
+        "text": "={{ $json.resposta }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        784,
+        32
+      ],
+      "id": "d2254404-4ee4-4fd7-b4c3-3c3a6702a1c1",
+      "name": "Send a text message",
+      "webhookId": "005a1513-614f-49ff-b02a-69d4e8046096",
+      "credentials": {
+        "telegramApi": {
+          "id": "9XPgChFNl08L6Ne8",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Telegram Trigger').first().json.message.text }}",
+                    "rightValue": "pix",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "4602485e-23e6-4fd5-bfbe-f95e191e766b"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Pix"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "2e9f61c3-32f8-40b3-b92c-bced25cfcb16",
+                    "leftValue": "={{ $('Telegram Trigger').first().json.message.text }}",
+                    "rightValue": "telefone",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Telefone"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "Outras"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        336,
+        16
+      ],
+      "id": "8acd151a-879e-4040-af55-0fa10889fc17",
+      "name": "message type"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "08c575bb-08d6-4ce2-a3fe-7bd23df60003",
+              "name": "resposta",
+              "value": "Minha chave pix é email@gmail.com",
+              "type": "string"
+            },
+            {
+              "id": "3fdfec9e-6af7-49f0-b004-45d45bef4a89",
+              "name": "",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        560,
+        -160
+      ],
+      "id": "5ec9edc9-250c-4ca7-86f3-aa91bab43511",
+      "name": "pix message"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "40a66807-90fd-41e9-a77c-509e01d17f26",
+              "name": "resposta",
+              "value": "Meu telefone é 6199999999",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        560,
+        32
+      ],
+      "id": "d0e655cb-0c53-4c7d-b634-b37ab67bc849",
+      "name": "phone message"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3f350c61-37a4-4f64-9922-49521ca72891",
+              "name": "resposta",
+              "value": "=recebi a mensagem:  {{ $json.resposta }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        560,
+        224
+      ],
+      "id": "6a218c2b-5b7f-4795-9deb-ea547b7782ed",
+      "name": "Other message"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "message type",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "message type": {
+      "main": [
+        [
+          {
+            "node": "pix message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "phone message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Other message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "pix message": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "phone message": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Other message": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "ae7d3091-b8d2-473b-80fd-8542f08690ec",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e266cc4a9c89517ac6744422257780ce0763a50852c17445f92fd4c9259ceea9"
+  },
+  "id": "P7e7bD26ASqiZJBG",
+  "tags": [
+    {
+      "name": "chatbot",
+      "id": "brqplEaZtjGuKQFp",
+      "updatedAt": "2026-04-01T23:39:48.758Z",
+      "createdAt": "2026-04-01T23:39:48.758Z"
+    },
+    {
+      "name": "Faculdade",
+      "id": "zB5eshuZOKTyyK1x",
+      "updatedAt": "2026-04-01T23:39:39.257Z",
+      "createdAt": "2026-04-01T23:39:39.257Z"
+    }
+  ]
+}
