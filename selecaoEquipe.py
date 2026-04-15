@@ -1,24 +1,24 @@
-"""
-==================================| AUTORES |================================
-=============================| Tema: Seleção de Equipes
-=============================| by Thiago & Bryan.
-=============================================================================
 
-=============================================================================
-MONTAGEM DE TIME DE PROJETO
-=============================================================================
-Problema: Selecionar um subconjunto de N pessoas disponíveis, cada uma com
-habilidades e custos distintos, de forma a cobrir as habilidades necessárias
-para o projeto dentro de um orçamento limite — maximizando a "performance"
-do time.
+# ==================================| AUTORES |================================
+# =============================| Tema: Seleção de Equipes
+# =============================| by Thiago & Bryan.
+# =============================================================================
+# 
+# =============================================================================
+# MONTAGEM DE TIME DE PROJETO
+# =============================================================================
+# Problema: Selecionar um subconjunto de N pessoas disponíveis, cada uma com
+# habilidades e custos distintos, de forma a cobrir as habilidades necessárias
+# para o projeto dentro de um orçamento limite — maximizando a "performance"
+# do time.
+# 
+# Técnicas utilizadas:
+#   1. Modelagem como Espaço de Estados
+#   2. Busca em Largura (BFS)
+#   3. Heurística de cobertura de habilidades
+#   4. Algoritmo Genético (AG) completo
+# =============================================================================
 
-Técnicas utilizadas:
-  1. Modelagem como Espaço de Estados
-  2. Busca em Largura (BFS)
-  3. Heurística de cobertura de habilidades
-  4. Algoritmo Genético (AG) completo
-=============================================================================
-"""
 
 import random
 from collections import deque
@@ -73,15 +73,15 @@ N = len(PESSOAS)  # total de candidatos disponíveis
 #   • queremos MAXIMIZAR a performance total do time
 
 def custo_total(estado):
-    """Soma os custos das pessoas incluídas no estado."""
+    # Soma os custos das pessoas incluídas no estado.
     return sum(PESSOAS[i]["custo"] for i, bit in enumerate(estado) if bit == 1)
 
 def performance_total(estado):
-    """Soma as performances das pessoas incluídas no estado."""
+    # Soma as performances das pessoas incluídas no estado.
     return sum(PESSOAS[i]["performance"] for i, bit in enumerate(estado) if bit == 1)
 
 def habilidades_cobertas(estado):
-    """Retorna o conjunto de habilidades cobertas pelo time representado pelo estado."""
+    # Retorna o conjunto de habilidades cobertas pelo time representado pelo estado.
     skills = set()
     for i, bit in enumerate(estado):
         if bit == 1:
@@ -89,11 +89,11 @@ def habilidades_cobertas(estado):
     return skills
 
 def eh_objetivo(estado):
-    """
-    Um estado é OBJETIVO se:
-      - Não excede o orçamento
-      - Cobre todas as habilidades necessárias
-    """
+    
+    # Um estado é OBJETIVO se:
+    # - Não excede o orçamento
+    # - Cobre todas as habilidades necessárias
+
     return (
         custo_total(estado) <= ORCAMENTO and
         HABILIDADES_NECESSARIAS.issubset(habilidades_cobertas(estado))
@@ -135,10 +135,10 @@ def heuristica(estado):
 # examinar todas as pessoas — evita explorar combinações inviáveis.
 
 def bfs():
-    """
-    Realiza BFS no espaço de estados.
-    Retorna a MELHOR solução encontrada (maior performance), ou None.
-    """
+
+    # Realiza BFS no espaço de estados.
+    # Retorna a MELHOR solução encontrada (maior performance), ou None.
+
     # Estado inicial: ninguém selecionado, e decidimos sobre a pessoa 0 em seguida.
     # Cada item na fila: (estado_parcial_como_lista, próximo_índice_a_decidir)
     fila = deque()
@@ -222,12 +222,12 @@ ELITISMO       = 2     # quantos melhores passam direto para a próxima geraçã
 
 
 def gerar_individuo():
-    """Cria um cromossomo aleatório (solução candidata)."""
+    # Cria um cromossomo aleatório (solução candidata).
     return [random.randint(0, 1) for _ in range(N)]
 
 
 def pegar_fitness(indice, fitnesses):
-    """Retorna o valor de fitness de um indivíduo pelo seu índice na lista."""
+    #Retorna o valor de fitness de um indivíduo pelo seu índice na lista.
     return fitnesses[indice]
 
 
@@ -259,11 +259,11 @@ def calcular_fitness(individuo):
 
 
 def selecao_torneio(populacao, fitnesses):
-    """
-    Seleção por Torneio:
-    Sorteia TAM_TORNEIO indivíduos aleatoriamente e retorna o melhor.
-    Mantém pressão seletiva sem eliminar toda a diversidade.
-    """
+    
+    # Seleção por Torneio:
+    # Sorteia TAM_TORNEIO indivíduos aleatoriamente e retorna o melhor.
+    # Mantém pressão seletiva sem eliminar toda a diversidade.
+    
     candidatos = random.sample(range(len(populacao)), TAM_TORNEIO)
 
     # Seleciona o candidato com maior fitness entre os sorteados
@@ -275,11 +275,11 @@ def selecao_torneio(populacao, fitnesses):
 
 
 def crossover_um_ponto(pai1, pai2):
-    """
-    Crossover de Um Ponto:
-    Um ponto de corte aleatório divide os pais em dois segmentos.
-    Os filhos recebem segmentos alternados de cada pai.
-    """
+    
+    # Crossover de Um Ponto:
+    # Um ponto de corte aleatório divide os pais em dois segmentos.
+    # Os filhos recebem segmentos alternados de cada pai.
+    
     if random.random() > TAXA_CROSSOVER:
         return pai1[:], pai2[:]  # sem crossover, filhos = cópias dos pais
 
@@ -290,24 +290,24 @@ def crossover_um_ponto(pai1, pai2):
 
 
 def mutacao_flip_bit(individuo):
-    """
-    Mutação por Flip de Bit:
-    Cada gene tem TAXA_MUTACAO de chance de ser invertido (0 ↔ 1).
-    Garante diversidade genética e evita convergência prematura.
-    """
+    
+    # Mutação por Flip de Bit:
+    # Cada gene tem TAXA_MUTACAO de chance de ser invertido (0 ↔ 1).
+    # Garante diversidade genética e evita convergência prematura.
+    
     return [1 - gene if random.random() < TAXA_MUTACAO else gene
             for gene in individuo]
 
 
 def algoritmo_genetico():
-    """
-    Loop principal do Algoritmo Genético.
-    Retorna o melhor indivíduo encontrado após NUM_GERACOES gerações.
-    """
+    
+    # Loop principal do Algoritmo Genético.
+    # Retorna o melhor indivíduo encontrado após NUM_GERACOES gerações.
+    
     # Inicialização: população totalmente aleatória
     populacao = [gerar_individuo() for _ in range(TAM_POPULACAO)]
 
-    melhor_global         = None
+    melhor_global = None
     melhor_fitness_global = -float("inf")
 
     for geracao in range(1, NUM_GERACOES + 1):
@@ -366,7 +366,7 @@ def algoritmo_genetico():
 # =============================================================================
 
 def exibir_resultado(titulo, estado):
-    """Imprime um resumo formatado do time selecionado."""
+    # Imprime um resumo formatado do time selecionado.
     if estado is None:
         print(f"\n{'='*60}")
         print(f"  {titulo}")
